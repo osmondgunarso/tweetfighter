@@ -54,7 +54,7 @@
 			firstUpdate(player1);
 			firstUpdate(player2);
 			
-			stopCode = setInterval(function(){update()}, 5000);
+			stopCode = setInterval(function(){update()}, 2000);
 		}
 		
 		function firstUpdate(player) {
@@ -76,7 +76,6 @@
 					$('#textbox').attr("disabled", false);
 				}
 			});
-			player.state ++;
 		}
 		
 		function update() {
@@ -85,30 +84,33 @@
 			getTweets(player2);
 			if (player1.numTweets > player2.numTweets){
 				player2.health -= 10;
-				player2.state = 3;
-				if (player1.state == 4)
-					player1.state = 2;
+				player2.state = 4;
+				if (player1.state == 3)
+					player1.state = 5;
 				else
-					player1.state = 4;
+					player1.state = 3;
 				if (player2.health == 0) {
 					clearInterval(stopCode);
 					player2.state = 6;
+					player1.state = 8;
 				}
 			}
 			if (player2.numTweets > player1.numTweets){
 				player1.health -= 10;
-				player1.state = 3;
-				if (player2.state == 4)
-					player2.state = 2;
+				player1.state = 4;
+				if (player2.state == 3)
+					player2.state = 5;
 				else
-					player2.state = 4;
+					player2.state = 3;
 				if (player1.health == 0) {
 					clearInterval(stopCode);
 					player1.state = 6;
+					player2.state = 8;
 				}
 			}
 			if (player1.numTweets == player2.numTweets) {
-				// NEW PICTURE
+				player1.state = 1;
+				player2.state = 1;
 			}
 			
 			debugInfo();
@@ -206,12 +208,12 @@
 		
 		function loadShit() {
 			var seattleSet = new Array();
-			for(var i = 1; i <= 8; i++){
+			for(var i = 1; i <= 9; i++){
 				var temp = new Image().src = "photos/Seattle"+i+".png";
 				player1.sprites.push(new Sprite(temp));
 			} 
 			var SFset = new Array();
-			for(var i = 1; i <= 8; i++){
+			for(var i = 1; i <= 9; i++){
 				var temp = new Image().src = "photos/SanFran"+i+".png";
 				player2.sprites.push(new Sprite(temp));
 			}
@@ -222,7 +224,7 @@
 				player1.sprites[i].position = {x : 10, y: 10};
 			}
 			for(var i = 0; i < player2.sprites.length; i++){
-				player2.sprites[i].position ={x : c.width-250, y: 10};
+				player2.sprites[i].position ={x : c.width-player2.sprites[i].img.width, y: 10};
 			}
 			setInterval(function(){
 				c.width = c.width;
