@@ -2,19 +2,19 @@
 <html>
 <body>
 
-<canvas id="myCanvas" width="480" height="320" style="border:1px solid #c3c3c3;">
+<canvas id="myCanvas" width="800" height="495" style="border:1px solid #c3c3c3;">
 Your browser does not support the HTML5 canvas tag.
 </canvas>
 
 <script>
 function Sprite(source){
 	this.img = new Image();
-	this.img.src = source;
+	this.img.src = source[0];
 	this.position = {x: 0, y:0};
 	this.origin = {x:0, y:0};
 	this.rotation = 0;
 	this.scale = {x:1, y:1};
-	this.children = new Array();	
+	this.children = new Array();
 }
 
 Sprite.prototype.draw = function(context){
@@ -29,19 +29,31 @@ Sprite.prototype.draw = function(context){
 	}
 	context.restore();
 };
+var seattleSet = new Array();
+for(var i = 1; i <= 7; i++){
+	var temp = new Image().src = "photos/Seattle"+i+".png";
+	seattleSet.push(temp);
+} 
+var SFset = new Array();
+for(var i = 1; i <= 7; i++){
+	var temp = new Image().src = "photos/SanFran"+i+".png";
+	SFset.push(temp);
+}
 
-var player1 = new Sprite("photos/stick.png");
-var player2 = new Sprite("photos/stick.png");
-var PlayerHand1 = new Sprite(//hand);
-var playerHand2 = new Sprite(//inverted hand);
+var player1 = new Sprite(seattleSet);
+var player2 = new Sprite(SFset);
+var PlayerHand1 = new Sprite("photos/singleHand.png");
 var c=document.getElementById("myCanvas");
 var ctx=c.getContext("2d");
-sprite.origin = {x: sprite.img.width/2, y: sprite.img.height/2};
-sprite.position = {x : c.width/2, y: c.height/2};
+PlayerHand1.rotation = 90*Math.PI/180;
+PlayerHand1.position ={x: c.width/2, y: c.height/2};
+player1.origin = {x: player1.img.width/2, y: player1.img.height/2};
+player1.position = {x : c.width/2, y: c.height/2};
 setInterval(function(){
 	c.width = c.width;
-	sprite.rotation += .01;
-	sprite.draw(ctx);
+	PlayerHand1.draw(ctx);
+	player1.rotation += .01;
+	player1.draw(ctx);
 },1000/60); 
 </script>
 
