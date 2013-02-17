@@ -1,55 +1,49 @@
-<Html>
-<script>
-//create the canvas
-var canvas = codument.createElement("canvas");
-var ctx = canvas.getContext("2d");
-canvas.width = 512;
-canvas.height = 480;
-document.body.appendChild(canvas);
-
-//background image
-var bgReady = false;
-var bgImage = new Image();
-bgImage.onload = function(){
-	bgReady = true;
-};
-bgImage.src = "TestPic.jpg";
-
-//Game objects
-var p1 = {
-	speed; 256 //pix per second
-	x:0,
-	y:0
-}
-var monster = {
-	x:0,
-	y:0
-}
-
-//draw
-var render = function(){
-	if(bgReady){
-		ctx.drawImage(bgImage,0,0);
-	}
-	if(heroReady){
-		ctx.drawImage(p1Image, p1.x, p1.y);
-	}
-}
-
-var main = funciton(){
-	var now = Date.now();
-	var delta = now - then;
-	
-	update(delta/1000);
-	render();
-	
-	then = now;
-}
-
-reset();
-var then = date.now();
-setInterval(main, 1);
-</script>
+<!DOCTYPE html>
+<html>
 <body>
+
+<canvas id="myCanvas" width="480" height="320" style="border:1px solid #c3c3c3;">
+Your browser does not support the HTML5 canvas tag.
+</canvas>
+
+<script>
+function Sprite(source){
+	this.img = new Image();
+	this.img.src = source;
+	this.position = {x: 0, y:0};
+	this.origin = {x:0, y:0};
+	this.rotation = 0;
+	this.scale = {x:1, y:1};
+	this.children = new Array();	
+}
+
+Sprite.prototype.draw = function(context){
+	context.save();
+	context.translate(this.position.x, this.position.y);
+	context.scale(this.scale.x, this.scale.y);
+	context.rotate(this.rotation);
+	context.translate(-this.origin.x, -this.origin.y);
+	context.drawImage(this.img, 0,0);
+	for(var i = 0; i < this.children.length; i++){
+		this.children[i].draw(context);
+	}
+	context.restore();
+};
+
+var sprite = new Sprite("photos/stick.png");
+
+var c=document.getElementById("myCanvas");
+var ctx=c.getContext("2d");
+sprite.origin = {x: sprite.img.width/2, y: sprite.img.height/2};
+sprite.position = {x : c.width/2, y: c.height/2};
+setInterval(function(){
+	c.width = c.width;
+	sprite.rotation += .01;
+	sprite.draw(ctx);
+},1000/60); 
+</script>
+
 </body>
-</Html>
+</html>
+
+
