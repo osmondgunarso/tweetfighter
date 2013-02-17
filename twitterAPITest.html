@@ -37,6 +37,7 @@
 		
 		//timer
 		function start(){
+			loadShit();
 			$('#firstBox').attr("disabled", "disabled");
 			$('#secondBox').attr("disabled", "disabled");
 			player1 = new Player(document.getElementById("firstBox").value);
@@ -49,7 +50,6 @@
 			firstUpdate(player1);
 			firstUpdate(player2);
 			
-//			var interval =  Math.floor(5000);
 			setInterval(function(){update()}, 5000);
 		}
 		
@@ -63,15 +63,6 @@
 					player.pastInformation = data.max_id;
 					console.log(data);
 					$('#error').empty();
-//					if (data.results.length == 0)
-//						$('#error').append("#" + player.hash + " has no tweets :(");
-//					if (data.max_id != data.since_id)
-//						player.numTweets = data.results.length;
-//					for (var i = 0; i < data.results.length; i++) {
-//						if(player.user.indexOf(temp) == -1){
-//							player.user.push(temp.from_user);
-//						}
-//					}
 				},
 				error: function(xhr, status, errorThrown) {
 					player.numTweets = 0;
@@ -90,8 +81,7 @@
 				player2.health -= 10;
 			if (player2.numTweets > player1.numTweets)
 				player1.health -= 10;
-//			player1.health -= player2.numTweets;
-//			player2.health -= player1.numTweets;
+
 			debugInfo();
 			console.log(player1);
 			console.log(player2);
@@ -112,15 +102,8 @@
 					player.pastInformation = data.max_id;
 					console.log(data);
 					$('#error').empty();
-//					if (data.results.length == 0)
-//						$('#error').append("#" + player.hash + " has no tweets :(");
 					if (data.max_id != data.since_id)
 						player.numTweets = data.results.length;
-//					for (var i = 0; i < data.results.length; i++) {
-//						if(player.user.indexOf(temp) == -1){
-//							player.user.push(temp.from_user);
-//						}
-//					}
 				},
 				error: function(xhr, status, errorThrown) {
 					player.numTweets = 0;
@@ -131,24 +114,7 @@
 				}
 			});
 		}
-//			var userReq = $.ajax({
-//				type: 'GET',
-//				dataType: 'jsonp',
-//				url: "https://api.twitter.com/1/users/show.json?screen_name="+player.user.toString(),
-//				success: function(data) {
-//					$('#error').empty();
-//					for(var i = 0; i < data.lenght; i++){
-//						player.attack += data.followers_count;
-//					}
-//				},
-//				error: function(xhr, status, errorThrown) {
-//					console.log(errorThrown);
-//					$('#error').empty();
-//					$('#error').append("no");
-//					$('#textbox').attr("disabled", false);
-//				}
-//			});
-//			console.log(player.attack);
+		
 		function debugInfo() {
 			$('#tweets').empty();
 			var row = document.createElement("tr");
@@ -192,7 +158,7 @@
 			this.position = {x: 0, y:0};
 			this.origin = {x:0, y:0};
 			this.rotation = 0;
-			this.scale = {x:1, y:1};
+			this.scale = {x:.2, y:.2};
 			this.children = new Array();
 		}
 
@@ -208,29 +174,31 @@
 			}
 			context.restore();
 		};
-		var seattleSet = new Array();
-		for(var i = 1; i <= 7; i++){
-			var temp = new Image().src = "photos/Seattle"+i+".png";
-			seattleSet.push(temp);
-		} 
-		var SFset = new Array();
-		for(var i = 1; i <= 7; i++){
-			var temp = new Image().src = "photos/SanFran"+i+".png";
-			SFset.push(temp);
+		
+		function loadShit() {
+			var seattleSet = new Array();
+			for(var i = 1; i <= 7; i++){
+				var temp = new Image().src = "photos/Seattle"+i+".png";
+				seattleSet.push(temp);
+			} 
+			var SFset = new Array();
+			for(var i = 1; i <= 7; i++){
+				var temp = new Image().src = "photos/SanFran"+i+".png";
+				SFset.push(temp);
+			}
+		
+			var player1 = new Sprite(seattleSet);
+			var player2 = new Sprite(SFset);
+			var c = document.getElementById("myCanvas");
+			var ctx=c.getContext("2d");
+			player1.position = {x : 10, y: 10};
+			player2.position = {x : c.width-250, y: 10};
+			setInterval(function(){
+				c.width = c.width;
+				player1.draw(ctx);
+				player2.draw(ctx);
+			},1000/60); 
 		}
-
-		var player1 = new Sprite(seattleSet);
-		var player2 = new Sprite(SFset);
-		var c = document.getElementById("myCanvas");
-		var ctx=c.getContext("2d");
-		player1.position = {x : 10, y: c.height-10};
-		player2.position = {x : c.width-10, y: c.height -10};
-		setInterval(function(){
-			c.width = c.width;
-			player1.draw(ctx);
-			player2.draw(ctx);
-		},1000/60); 
-
 </script>
 	<h2>Enter a hashtag!</h2>
 	<div>
