@@ -1,0 +1,70 @@
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Test</title>
+	
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#button').click(function(){
+				getTweets(textbox.value);
+			});
+			
+			$('#textbox').keypress(function(event){
+				if (event.which == 13)
+					getTweets(textbox.value);
+			});
+		});
+		
+		function getTweets(hashtag) {
+		//	$('#textbox').attr("disabled", true);
+		//	$('#tweets').empty();
+		//	$('#error').empty();
+		//	$('#error').append("Sending request...");
+			if (hashtag.charAt(0) == '#')
+				hashtag = hashtag.substring(1);
+			
+			var req = $.ajax({
+				type: 'GET',
+				dataType: 'jsonp',
+				url: 'http://search.twitter.com/search.json?q=%23'+hashtag,
+				success: function(data) {
+					console.log(data);
+				}
+			});
+		}
+	</script>
+	
+	<style type="text/css">
+		body {
+			font-family: monospace;
+			text-align: center;
+		}
+		table {
+			border: 2px solid black;
+			border-collapse: collapse;
+		}
+		td {
+			border: 1px solid black;
+			padding: 4px;
+		}
+		#error {
+			font-style: italic;
+			color: red;
+		}
+	</style>
+</head>
+
+<body>
+	<h2>Enter a hashtag!</h2>
+	<div>
+		<input type="text" id="textbox" value="#CodeDaySEA">
+		<input type="button" id="button" value="Submit">
+	</div>
+	<br>
+	<div id="error"></div>
+	<table id="tweets" align=center></table>
+</body>
+
+</html>
