@@ -1,1 +1,182 @@
-lkkanssdfklnasvkjn
+
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Mini-Twitter</title>
+
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+		//sockets
+		
+		$(document).ready(function(){
+		//	console.log('ready!');
+			
+			$('#button').click(function(){
+				getTweets();
+			})
+			
+			$('#textbox').keypress(function(event){
+				if (event.which == 13)
+					getTweets();
+			})
+		});
+		
+		function getTweets() {
+			$('#textbox').attr("disabled", true);
+			$('#tweets').empty();
+			$('#error').empty();
+			$('#error').append("Sending request...");
+			
+			var handle = textbox.value;
+			if (handle.charAt(0)==('@'))
+				handle = handle.substring(1);
+			var req = $.ajax({
+				type: 'GET',
+				dataType: 'jsonp',
+			//	url: 'http://search.twitter.com/search.json?q='+handle, //gets tweets by AND AT
+				url: 'https://api.twitter.com/1/statuses/user_timeline.json?include_rts=true&include_entities=true&screen_name='+handle, //gets tweets by (and retweets)
+				timeout: 5000,
+				success: function(data) {
+					$('#error').empty();
+				//	console.log(data);
+					if (data.length == 0)
+						$('#error').append("@" + handle + " hasn't tweeted yet!");
+					for (var i = 0; i < data.length; i++) {
+						createRow(data[i]);
+					}
+					$('a').attr('target', '_blank');
+					$('#textbox').attr("disabled", false);
+				//	console.log("done!");
+				},
+				error: function(xhr, status, errorThrown) {
+					console.log(errorThrown);
+					$('#error').empty();
+					$('#error').append("Can't reach @" + handle + ". Is this account private?");
+					$('#textbox').attr("disabled", false);
+				}
+			})
+		//	console.log('here!');
+		}
+		
+		function createRow(data) {
+			var row = document.createElement("tr");
+			var tweet = document.createElement("td");
+			var time = document.createElement("td");
+			
+			// makes links
+			var text = [];
+			var urls = data.entities.urls;
+			var shouts = data.entities.user_mentions;
+			var urlIndex = 0;
+			var shoutIndex = 0;
+			var stringIndex = 0;
+			
+			while (urlIndex < urls.length || shoutIndex < shouts.length) {
+				if (shoutIndex == shouts.length || urlIndex < urls.length && urls[urlIndex].indices[0] < shouts[shoutIndex].indices[0]) {
+					text.push(data.text.substring(stringIndex, urls[urlIndex].indices[0]));
+					text.push(data.text.substring(urls[urlIndex].indices[0], urls[urlIndex].indices[1]).link(urls[urlIndex].expanded_url));
+					stringIndex = urls[urlIndex].indices[1];
+					urlIndex++;
+					if (urlIndex == urls.length && shoutIndex == shouts.length)
+						text.push(data.text.substring(urls[urlIndex - 1].indices[1]));
+				} else {
+					text.push(data.text.substring(stringIndex, shouts[shoutIndex].indices[0]));
+					text.push(data.text.substring(shouts[shoutIndex].indices[0], shouts[shoutIndex].indices[1]).link("javascript:newUser('@" + shouts[shoutIndex].screen_name + "')"));
+					stringIndex = shouts[shoutIndex].indices[1];
+					shoutIndex++;
+					if (urlIndex == urls.length && shoutIndex == shouts.length)
+						text.push(data.text.substring(shouts[shoutIndex - 1].indices[1]));
+				}
+			}
+
+			if (urls.length == 0 && shouts.length == 0)
+				text.push(data.text);
+			
+			for (var i = 0; i < text.length; i++)
+				$(tweet).append(text[i]);
+			$(time).append(trimTime(data.created_at));
+			$(row).append(tweet);
+			$(row).append(time);
+			$('#tweets').append(row);
+		}
+		
+		function trimTime(str) {
+		//	console.log(str);
+			var monthString = str.substring(4, 7);
+			var month;
+				if (monthString == "Jan") month = 0;
+				if (monthString == "Feb") month = 1;
+				if (monthString == "Mar") month = 2;
+				if (monthString == "Apr") month = 3;
+				if (monthString == "May") month = 4;
+				if (monthString == "Jun") month = 5;
+				if (monthString == "Jul") month = 6;
+				if (monthString == "Aug") month = 7;
+				if (monthString == "Sep") month = 8;
+				if (monthString == "Oct") month = 9;
+				if (monthString == "Nov") month = 10;
+				if (monthString == "Dec") month = 11;
+			var day = parseInt(str.substring(8, 10));
+			var hours = parseInt(str.substring(11, 13) - 8); //-8 brings time to PST
+			var minutes = parseInt(str.substring(14, 16));
+			var seconds = parseInt(str.substring(17, 19));
+			var year = parseInt(str.substring(26));
+			
+			var date = new Date(year, month, day, hours, minutes, seconds, 0); //shifts time to PST
+		//	console.log(date);
+			
+			var am = "AM";
+		//	console.log(date.getHours());
+			if (date.getHours() >= 12)
+				am = "PM";
+			hours = date.getHours() % 12;
+			if (hours == 0)
+				hours = 12;
+			if (minutes < 10)
+				minutes = "0" + minutes;
+			year -= 2000;
+			if (year < 10)
+				year = "0" + year;
+
+			return date.getDate()  + " " + monthString + " " + (year) + " - " + hours + ":" + minutes + " " + am;
+		}
+	
+		function newUser(handle) {
+			$('#textbox').attr("value", handle);
+			getTweets();
+		}
+	</script>
+	<style type="text/css">
+		body {
+			font-family: monospace;
+			text-align: center;
+		}
+		table {
+			border: 2px solid black;
+			border-collapse: collapse;
+		}
+		td {
+			border: 1px solid black;
+			padding: 4px;
+		}
+		#error {
+			font-style: italic;
+			color: red;
+		}
+	</style>
+</head>
+
+<body>
+	<h2>Enter a twitter handle!</h2>
+	<div>
+		<input type="text" id="textbox" value="@">
+		<input type="button" id="button" value="Submit">
+	</div>
+	<br>
+	<div id="error"></div>
+	<table id="tweets" align=center></table>
+</body>
+
+</html>

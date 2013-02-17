@@ -1,0 +1,14 @@
+{
+  "name": "Tweetfighter",
+  "subdomain": "kingozzy24.Tweetfighter",
+  "scripts": {
+    "start": "Tweetfighter.js"
+  },
+  "version": "0.0.0-3",
+  "engines": {
+    "node": "0.8.x"
+  },
+  "dependencies": {
+    "express": "*"
+  }
+}
