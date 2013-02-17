@@ -13,6 +13,7 @@
 			this.health = 100;
 			this.pastInformation = 0;
 			this.numTweets = 0;
+			this.sprites = new Array();
 		}
 		
 		Player.prototype.toString = function() {
@@ -37,7 +38,6 @@
 		
 		//timer
 		function start(){
-			loadShit();
 			$('#firstBox').attr("disabled", "disabled");
 			$('#secondBox').attr("disabled", "disabled");
 			player1 = new Player(document.getElementById("firstBox").value);
@@ -47,6 +47,7 @@
 			if (player2.hash.charAt(0) == '#')
 				player2.hash = player2.hash.substring(1);
 				
+			loadShit();
 			firstUpdate(player1);
 			firstUpdate(player2);
 			
@@ -72,16 +73,21 @@
 					$('#textbox').attr("disabled", false);
 				}
 			});
+			player.state ++;
 		}
 		
 		function update() {
 			getTweets(player1);
 			getTweets(player2);
-			if (player1.numTweets > player2.numTweets)
+			if (player1.numTweets > player2.numTweets){
 				player2.health -= 10;
-			if (player2.numTweets > player1.numTweets)
+				player2.state = 4;
+			}
+			if (player2.numTweets > player1.numTweets){
 				player1.health -= 10;
-
+				player1.state = 4;
+			}
+			
 			debugInfo();
 			console.log(player1);
 			console.log(player2);
@@ -154,12 +160,13 @@
 //canvas
 		function Sprite(source){
 			this.img = new Image();
-			this.img.src = source[0];
+			this.img.src = source;
 			this.position = {x: 0, y:0};
 			this.origin = {x:0, y:0};
 			this.rotation = 0;
-			this.scale = {x:.2, y:.2};
+			this.scale = {x:1, y:1};
 			this.children = new Array();
+			this.state = 1;
 		}
 
 		Sprite.prototype.draw = function(context){
@@ -177,26 +184,28 @@
 		
 		function loadShit() {
 			var seattleSet = new Array();
-			for(var i = 1; i <= 7; i++){
+			for(var i = 1; i <= 8; i++){
 				var temp = new Image().src = "photos/Seattle"+i+".png";
-				seattleSet.push(temp);
+				player1.sprites.push(new Sprite(temp));
 			} 
 			var SFset = new Array();
-			for(var i = 1; i <= 7; i++){
+			for(var i = 1; i <= 8; i++){
 				var temp = new Image().src = "photos/SanFran"+i+".png";
-				SFset.push(temp);
+				player2.sprites.push(new Sprite(temp));
 			}
 		
-			var player1 = new Sprite(seattleSet);
-			var player2 = new Sprite(SFset);
 			var c = document.getElementById("myCanvas");
 			var ctx=c.getContext("2d");
-			player1.position = {x : 10, y: 10};
-			player2.position = {x : c.width-250, y: 10};
+			for(var i = 0; i < player1.sprites.length; i++){
+				player1.sprites[i].position = {x : 10, y: 10};
+			}
+			for(var i = 0; i < player2.sprites.length; i++){
+				player2.sprites[i].position ={x : c.width-250, y: 10};
+			}
 			setInterval(function(){
 				c.width = c.width;
-				player1.draw(ctx);
-				player2.draw(ctx);
+				player1.sprites[0].draw(ctx);
+				player2.sprites[0].draw(ctx);
 			},1000/60); 
 		}
 </script>
