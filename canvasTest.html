@@ -42,11 +42,8 @@ for(var i = 1; i <= 7; i++){
 
 var player1 = new Sprite(seattleSet);
 var player2 = new Sprite(SFset);
-var PlayerHand1 = new Sprite("photos/singleHand.png");
 var c=document.getElementById("myCanvas");
 var ctx=c.getContext("2d");
-PlayerHand1.rotation = 90*Math.PI/180;
-PlayerHand1.position ={x: c.width/2, y: c.height/2};
 player1.origin = {x: player1.img.width/2, y: player1.img.height/2};
 player1.position = {x : c.width/2, y: c.height/2};
 setInterval(function(){
