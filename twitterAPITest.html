@@ -6,37 +6,81 @@
 	
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 	<script type="text/javascript">
+		var Player1 = {
+			hash:"",
+			health : 100,
+			attack : 0,
+			pastInformation : 0,
+			user: new Array()
+		};
+		var Player2 = {
+			hash:"",
+			health : 100,
+			attack : 0,
+			pastInformation : 0,
+			user: new Array()
+		};
+		
 		$(document).ready(function(){
 			$('#button').click(function(){
-				getTweets(textbox.value);
+				start();
 			});
 			
 			$('#textbox').keypress(function(event){
 				if (event.which == 13)
-					getTweets(textbox.value);
+					start();
 			});
 		});
 		
-		function getTweets(hashtag) {
+		//timer
+		function start(){
+			Player1.hash = document.getElementById("firstBox").value;
+			Player2.hash = document.getElementById("secondBox").value;
+			if (Player1.hash.charAt(0) == '#')
+				Player1.hash = Player1.hash.substring(1);
+			if (Player2.hash.charAt(0) == '#')
+				Player2.hash = Player1.hash.substring(1);
+			loopWrap();
+			var interval =  Math.floor((Math.random()*1000)+3000);
+			setInterval(function(){loopWrap()}, interval);
+		}
+		
+		function loopWrap(){
+			for(var i = 0; i <2; i++){
+				if(i == 0){
+					getTweets(Player1);
+				}else{
+					getTweets(Player2);
+				}
+			}
+		}
+		//get tweets
+		function getTweets(player) {
 			$('#textbox').attr("disabled", true);
 			$('#tweets').empty();
 			$('#error').empty();
 			$('#error').append("Sending request...");
-			if (hashtag.charAt(0) == '#')
-				hashtag = hashtag.substring(1);
 			
 			var req = $.ajax({
 				type: 'GET',
 				dataType: 'jsonp',
-				url: 'http://search.twitter.com/search.json?q=%23'+hashtag+"&result_type=recent&rpp=100&since_id=302944412575612900",
+				url: 'http://search.twitter.com/search.json?q=%23'+player.hash+"&result_type=recent&rpp=100&include_entities=true&since_id="+player.pastInformation,
 				success: function(data) {
+					player.pastInformation = data.max_id;
 					console.log(data);
 					$('#error').empty();
 					if (data.results.length == 0)
-						$('#error').append("#" + hashtag + " has no tweets :(");
+						$('#error').append("#" + player.hash + " has no tweets :(");
 					for (var i = 0; i < data.results.length; i++) {
 						createRow(data.results[i]);
+						player.user.push(data.results[i].from_user);
 					}
+					
+					//filter array for duplictates, why this is here I don't know
+					uniqueArray = myArray.filter(function(elem, pos) {
+						return myArray.indexOf(elem) == pos;
+					})
+					//what do these do?
 					$('a').attr('target', '_blank');
 					$('#textbox').attr("disabled", false);
 				},
@@ -48,6 +92,24 @@
 				}
 			});
 			
+			var userReq = $.ajax({
+				type: 'GET',
+				dataType: 'jsonp',
+				url: "https://api.twitter.com/1.1/users/lookup.json?screen_name="+player.user.toString(),
+				success: function(data) {
+					$('#error').empty();
+					for(var i = 0; i < data.lenght; i++){
+						player.attack += data.followers_count;
+					}
+				},
+				error: function(xhr, status, errorThrown) {
+					console.log(errorThrown);
+					$('#error').empty();
+					$('#error').append("no");
+					$('#textbox').attr("disabled", false);
+				}
+			});
+			console.log(player.attack);
 			function createRow(data) {
 				var row = document.createElement("tr");
 				var user = document.createElement("td");
@@ -55,6 +117,7 @@
 				
 				$(user).append(data.from_user);
 				$(tweet).append(data.text);
+				$(tweet).append(data.metadata);
 				$(row).append(user);
 				$(row).append(tweet);
 				$('#tweets').append(row);
@@ -85,8 +148,11 @@
 <body>
 	<h2>Enter a hashtag!</h2>
 	<div>
-		<input type="text" id="textbox" value="#CodeDaySEA">
+		<input type="text" id="firstBox" value="#CodeDaySEA">
 		<input type="button" id="button" value="Submit">
+	</div>
+		<input type = "text" id = "secondBox" value = "CodeDaySF">
+	<div>
 	</div>
 	<br>
 	<div id="error"></div>
