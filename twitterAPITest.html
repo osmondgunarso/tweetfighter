@@ -72,14 +72,13 @@
 					if (data.results.length == 0)
 						$('#error').append("#" + player.hash + " has no tweets :(");
 					for (var i = 0; i < data.results.length; i++) {
-						createRow(data.results[i]);
-						player.user.push(data.results[i].from_user);
+						var temp = data.results[i];
+						createRow(temp);
+						if(player.user.indexOf(temp) == -1){
+							player.user.push(temp.from_user);
+						}
 					}
 					
-					//filter array for duplictates, why this is here I don't know
-					uniqueArray = myArray.filter(function(elem, pos) {
-						return myArray.indexOf(elem) == pos;
-					})
 					//what do these do?
 					$('a').attr('target', '_blank');
 					$('#textbox').attr("disabled", false);
