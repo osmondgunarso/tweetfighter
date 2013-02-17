@@ -30,8 +30,10 @@ Sprite.prototype.draw = function(context){
 	context.restore();
 };
 
-var sprite = new Sprite("photos/stick.png");
-
+var player1 = new Sprite("photos/stick.png");
+var player2 = new Sprite("photos/stick.png");
+var PlayerHand1 = new Sprite(//hand);
+var playerHand2 = new Sprite(//inverted hand);
 var c=document.getElementById("myCanvas");
 var ctx=c.getContext("2d");
 sprite.origin = {x: sprite.img.width/2, y: sprite.img.height/2};
