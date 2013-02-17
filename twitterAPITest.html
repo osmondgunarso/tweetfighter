@@ -94,7 +94,7 @@
 			var userReq = $.ajax({
 				type: 'GET',
 				dataType: 'jsonp',
-				url: "https://api.twitter.com/1.1/users/lookup.json?screen_name="+player.user.toString(),
+				url: "https://api.twitter.com/1/users/show.json?screen_name="+player.user.toString(),
 				success: function(data) {
 					$('#error').empty();
 					for(var i = 0; i < data.lenght; i++){
