@@ -43,16 +43,53 @@
 				player1.hash = player1.hash.substring(1);
 			if (player2.hash.charAt(0) == '#')
 				player2.hash = player2.hash.substring(1);
-
+				
+			firstUpdate(player1);
+			firstUpdate(player2);
+			
 			var interval =  Math.floor((Math.random()*1000)+3000);
 			setInterval(function(){update()}, interval);
+		}
+		
+		function firstUpdate(player) {
+			var req = $.ajax({
+				type: 'GET',
+				dataType: 'jsonp',
+				url: 'http://search.twitter.com/search.json?q=%23'+player.hash+"&result_type=recent&rpp=1&include_entities=true&since_id="+player.pastInformation,
+				success: function(data) {
+					player.numTweets = 0;
+					player.pastInformation = data.max_id;
+					console.log(data);
+					$('#error').empty();
+//					if (data.results.length == 0)
+//						$('#error').append("#" + player.hash + " has no tweets :(");
+//					if (data.max_id != data.since_id)
+//						player.numTweets = data.results.length;
+//					for (var i = 0; i < data.results.length; i++) {
+//						if(player.user.indexOf(temp) == -1){
+//							player.user.push(temp.from_user);
+//						}
+//					}
+				},
+				error: function(xhr, status, errorThrown) {
+					player.numTweets = 0;
+					console.log(errorThrown);
+					$('#error').empty();
+					$('#error').append("Error :(. Try again?");
+					$('#textbox').attr("disabled", false);
+				}
+			});
 		}
 		
 		function update() {
 			getTweets(player1);
 			getTweets(player2);
-			player1.health -= player2.numTweets;
-			player2.health -= player1.numTweets;
+			if (player1.numTweets > player2.numTweets)
+				player2.health -= 10;
+			if (player2.numTweets > player1.numTweets)
+				player1.health -= 10;
+//			player1.health -= player2.numTweets;
+//			player2.health -= player1.numTweets;
 			debugInfo();
 			console.log(player1);
 			console.log(player2);
@@ -75,7 +112,8 @@
 					$('#error').empty();
 //					if (data.results.length == 0)
 //						$('#error').append("#" + player.hash + " has no tweets :(");
-					player.numTweets = data.results.length;
+					if (data.max_id != data.since_id)
+						player.numTweets = data.results.length;
 //					for (var i = 0; i < data.results.length; i++) {
 //						if(player.user.indexOf(temp) == -1){
 //							player.user.push(temp.from_user);
