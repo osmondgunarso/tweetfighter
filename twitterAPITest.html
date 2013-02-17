@@ -14,6 +14,7 @@
 			this.pastInformation = 0;
 			this.numTweets = 0;
 			this.sprites = new Array();
+			this.state = 0;
 		}
 		
 		Player.prototype.toString = function() {
@@ -81,11 +82,22 @@
 			getTweets(player2);
 			if (player1.numTweets > player2.numTweets){
 				player2.health -= 10;
-				player2.state = 4;
+				player2.state = 3;
+				if (player1.state == 4)
+					player1.state = 2;
+				else
+					player1.state = 4;
 			}
 			if (player2.numTweets > player1.numTweets){
 				player1.health -= 10;
-				player1.state = 4;
+				player1.state = 3;
+				if (player2.state == 4)
+					player2.state = 2;
+				else
+					player2.state = 4;
+			}
+			if (player1.numTweets = player2.numTweets) {
+				// NEW PICTURE
 			}
 			
 			debugInfo();
@@ -166,9 +178,8 @@
 			this.rotation = 0;
 			this.scale = {x:1, y:1};
 			this.children = new Array();
-			this.state = 1;
 		}
-
+	
 		Sprite.prototype.draw = function(context){
 			context.save();
 			context.translate(this.position.x, this.position.y);
@@ -204,8 +215,8 @@
 			}
 			setInterval(function(){
 				c.width = c.width;
-				player1.sprites[0].draw(ctx);
-				player2.sprites[0].draw(ctx);
+				player1.sprites[player1.state].draw(ctx);
+				player2.sprites[player2.state].draw(ctx);
 			},1000/60); 
 		}
 </script>
