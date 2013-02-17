@@ -1,0 +1,55 @@
+<Html>
+<script>
+//create the canvas
+var canvas = codument.createElement("canvas");
+var ctx = canvas.getContext("2d");
+canvas.width = 512;
+canvas.height = 480;
+document.body.appendChild(canvas);
+
+//background image
+var bgReady = false;
+var bgImage = new Image();
+bgImage.onload = function(){
+	bgReady = true;
+};
+bgImage.src = "TestPic.jpg";
+
+//Game objects
+var p1 = {
+	speed; 256 //pix per second
+	x:0,
+	y:0
+}
+var monster = {
+	x:0,
+	y:0
+}
+
+//draw
+var render = function(){
+	if(bgReady){
+		ctx.drawImage(bgImage,0,0);
+	}
+	if(heroReady){
+		ctx.drawImage(p1Image, p1.x, p1.y);
+	}
+}
+
+var main = funciton(){
+	var now = Date.now();
+	var delta = now - then;
+	
+	update(delta/1000);
+	render();
+	
+	then = now;
+}
+
+reset();
+var then = date.now();
+setInterval(main, 1);
+</script>
+<body>
+</body>
+</Html>
