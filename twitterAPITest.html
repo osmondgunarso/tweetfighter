@@ -22,7 +22,12 @@
 				start();
 			});
 			
-			$('#textbox').keypress(function(event){
+			$('#firstBox').keypress(function(event){
+				if (event.which == 13)
+					start();
+			});
+			
+			$('#secondBox').keypress(function(event){
 				if (event.which == 13)
 					start();
 			});
@@ -30,6 +35,8 @@
 		
 		//timer
 		function start(){
+			$('#firstBox').attr("disabled", "disabled");
+			$('#secondBox').attr("disabled", "disabled");
 			player1 = new Player(document.getElementById("firstBox").value);
 			player2 = new Player(document.getElementById("secondBox").value);
 			if (player1.hash.charAt(0) == '#')
@@ -47,8 +54,8 @@
 			player1.health -= player2.numTweets;
 			player2.health -= player1.numTweets;
 			debugInfo();
-			console.log(Player1);
-			console.log(Player2);
+			console.log(player1);
+			console.log(player2);
 		}
 		
 		//get tweets
@@ -66,14 +73,14 @@
 					player.pastInformation = data.max_id;
 					console.log(data);
 					$('#error').empty();
-					if (data.results.length == 0)
-						$('#error').append("#" + player.hash + " has no tweets :(");
-					for (var i = 0; i < data.results.length; i++) {
-						player.numTweets++;
+//					if (data.results.length == 0)
+//						$('#error').append("#" + player.hash + " has no tweets :(");
+					player.numTweets = data.results.length;
+//					for (var i = 0; i < data.results.length; i++) {
 //						if(player.user.indexOf(temp) == -1){
 //							player.user.push(temp.from_user);
 //						}
-					}
+//					}
 				},
 				error: function(xhr, status, errorThrown) {
 					player.numTweets = 0;
@@ -142,7 +149,7 @@
 		<input type="text" id="firstBox" value="#CodeDaySEA">
 		<input type="button" id="button" value="Submit">
 	</div>
-		<input type = "text" id = "secondBox" value = "CodeDaySF">
+		<input type = "text" id = "secondBox" value = "#CodeDaySF">
 	<div>
 	</div>
 	<br>
