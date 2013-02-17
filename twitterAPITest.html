@@ -28,9 +28,9 @@
 			var req = $.ajax({
 				type: 'GET',
 				dataType: 'jsonp',
-				url: 'http://search.twitter.com/search.json?q=%23'+hashtag,
+				url: 'http://search.twitter.com/search.json?q=%23'+hashtag+"&result_type=recent&rpp=100&since_id=302944412575612900",
 				success: function(data) {
-				//	console.log(data);
+					console.log(data);
 					$('#error').empty();
 					if (data.results.length == 0)
 						$('#error').append("#" + hashtag + " has no tweets :(");
