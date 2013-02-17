@@ -1,8 +1,12 @@
 //var and requirements
 var express = require ('express');
-var server = require('http').createServer(app);
+var http = require ("http");
+var server = http.createServer(app);
 var app = express();
 var io = require ('socket.io').listen(server);
+
+//timer
+setInterval(callTwitter(), Math.floor((Math.random()*1000)+1));
 
 //serve pages
 app.get("/", function(req, page){
