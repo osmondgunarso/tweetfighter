@@ -6,20 +6,16 @@
 	
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 	<script type="text/javascript">
-		var Player1 = {
-			hash:"",
-			health : 100,
-			attack : 0,
-			pastInformation : 0,
-			user: new Array()
-		};
-		var Player2 = {
-			hash:"",
-			health : 100,
-			attack : 0,
-			pastInformation : 0,
-			user: new Array()
-		};
+		function Player(hash) {
+			this.hash = hash;
+			this.health = 100;
+			this.pastInformation = 0;
+			this.numTweets = 0;
+		}
+		
+		Player.prototype.toString = function() {
+			return "Health: " + this.health + ", Tweets: " + this.numTweets;
+		}
 		
 		$(document).ready(function(){
 			$('#button').click(function(){
@@ -34,29 +30,29 @@
 		
 		//timer
 		function start(){
-			Player1.hash = document.getElementById("firstBox").value;
-			Player2.hash = document.getElementById("secondBox").value;
-			if (Player1.hash.charAt(0) == '#')
-				Player1.hash = Player1.hash.substring(1);
-			if (Player2.hash.charAt(0) == '#')
-				Player2.hash = Player1.hash.substring(1);
-			loopWrap();
+			player1 = new Player(document.getElementById("firstBox").value);
+			player2 = new Player(document.getElementById("secondBox").value);
+			if (player1.hash.charAt(0) == '#')
+				player1.hash = player1.hash.substring(1);
+			if (player2.hash.charAt(0) == '#')
+				player2.hash = player2.hash.substring(1);
+
 			var interval =  Math.floor((Math.random()*1000)+3000);
-			setInterval(function(){loopWrap()}, interval);
+			setInterval(function(){update()}, interval);
 		}
 		
-		function loopWrap(){
-			for(var i = 0; i <2; i++){
-				if(i == 0){
-					getTweets(Player1);
-				}else{
-					getTweets(Player2);
-				}
-			}
+		function update() {
+			getTweets(player1);
+			getTweets(player2);
+			player1.health -= player2.numTweets;
+			player2.health -= player1.numTweets;
+			debugInfo();
+			console.log(Player1);
+			console.log(Player2);
 		}
+		
 		//get tweets
 		function getTweets(player) {
-			$('#textbox').attr("disabled", true);
 			$('#tweets').empty();
 			$('#error').empty();
 			$('#error').append("Sending request...");
@@ -66,61 +62,57 @@
 				dataType: 'jsonp',
 				url: 'http://search.twitter.com/search.json?q=%23'+player.hash+"&result_type=recent&rpp=100&include_entities=true&since_id="+player.pastInformation,
 				success: function(data) {
+					player.numTweets = 0;
 					player.pastInformation = data.max_id;
 					console.log(data);
 					$('#error').empty();
 					if (data.results.length == 0)
 						$('#error').append("#" + player.hash + " has no tweets :(");
 					for (var i = 0; i < data.results.length; i++) {
-						var temp = data.results[i];
-						createRow(temp);
-						if(player.user.indexOf(temp) == -1){
-							player.user.push(temp.from_user);
-						}
+						player.numTweets++;
+//						if(player.user.indexOf(temp) == -1){
+//							player.user.push(temp.from_user);
+//						}
 					}
-					
-					//what do these do?
-					$('a').attr('target', '_blank');
-					$('#textbox').attr("disabled", false);
 				},
 				error: function(xhr, status, errorThrown) {
+					player.numTweets = 0;
 					console.log(errorThrown);
 					$('#error').empty();
-					$('#error').append("Can't reach @" + handle + ". Is this account private?");
+					$('#error').append("Error :(. Try again?");
 					$('#textbox').attr("disabled", false);
 				}
 			});
+		}
+//			var userReq = $.ajax({
+//				type: 'GET',
+//				dataType: 'jsonp',
+//				url: "https://api.twitter.com/1/users/show.json?screen_name="+player.user.toString(),
+//				success: function(data) {
+//					$('#error').empty();
+//					for(var i = 0; i < data.lenght; i++){
+//						player.attack += data.followers_count;
+//					}
+//				},
+//				error: function(xhr, status, errorThrown) {
+//					console.log(errorThrown);
+//					$('#error').empty();
+//					$('#error').append("no");
+//					$('#textbox').attr("disabled", false);
+//				}
+//			});
+//			console.log(player.attack);
+		function debugInfo() {
+			$('#tweets').empty();
+			var row = document.createElement("tr");
+			var d1 = document.createElement("td");
+			var d2 = document.createElement("td");
 			
-			var userReq = $.ajax({
-				type: 'GET',
-				dataType: 'jsonp',
-				url: "https://api.twitter.com/1/users/show.json?screen_name="+player.user.toString(),
-				success: function(data) {
-					$('#error').empty();
-					for(var i = 0; i < data.lenght; i++){
-						player.attack += data.followers_count;
-					}
-				},
-				error: function(xhr, status, errorThrown) {
-					console.log(errorThrown);
-					$('#error').empty();
-					$('#error').append("no");
-					$('#textbox').attr("disabled", false);
-				}
-			});
-			console.log(player.attack);
-			function createRow(data) {
-				var row = document.createElement("tr");
-				var user = document.createElement("td");
-				var tweet = document.createElement("td");
-				
-				$(user).append(data.from_user);
-				$(tweet).append(data.text);
-				$(tweet).append(data.metadata);
-				$(row).append(user);
-				$(row).append(tweet);
-				$('#tweets').append(row);
-			}
+			$(d1).append(player1.toString());
+			$(d2).append(player2.toString());
+			$(row).append(d1);
+			$(row).append(d2);
+			$('#tweets').append(row);
 		}
 	</script>
 	
