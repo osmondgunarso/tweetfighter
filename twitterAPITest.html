@@ -18,10 +18,10 @@
 		});
 		
 		function getTweets(hashtag) {
-		//	$('#textbox').attr("disabled", true);
-		//	$('#tweets').empty();
-		//	$('#error').empty();
-		//	$('#error').append("Sending request...");
+			$('#textbox').attr("disabled", true);
+			$('#tweets').empty();
+			$('#error').empty();
+			$('#error').append("Sending request...");
 			if (hashtag.charAt(0) == '#')
 				hashtag = hashtag.substring(1);
 			
@@ -30,9 +30,35 @@
 				dataType: 'jsonp',
 				url: 'http://search.twitter.com/search.json?q=%23'+hashtag,
 				success: function(data) {
-					console.log(data);
+				//	console.log(data);
+					$('#error').empty();
+					if (data.results.length == 0)
+						$('#error').append("#" + hashtag + " has no tweets :(");
+					for (var i = 0; i < data.results.length; i++) {
+						createRow(data.results[i]);
+					}
+					$('a').attr('target', '_blank');
+					$('#textbox').attr("disabled", false);
+				},
+				error: function(xhr, status, errorThrown) {
+					console.log(errorThrown);
+					$('#error').empty();
+					$('#error').append("Can't reach @" + handle + ". Is this account private?");
+					$('#textbox').attr("disabled", false);
 				}
 			});
+			
+			function createRow(data) {
+				var row = document.createElement("tr");
+				var user = document.createElement("td");
+				var tweet = document.createElement("td");
+				
+				$(user).append(data.from_user);
+				$(tweet).append(data.text);
+				$(row).append(user);
+				$(row).append(tweet);
+				$('#tweets').append(row);
+			}
 		}
 	</script>
 	
