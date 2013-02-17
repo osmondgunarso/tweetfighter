@@ -37,6 +37,8 @@
 			});
 		});
 		
+		var stopCode;
+		
 		//timer
 		function start(){
 			$('#firstBox').attr("disabled", "disabled");
@@ -52,7 +54,7 @@
 			firstUpdate(player1);
 			firstUpdate(player2);
 			
-			setInterval(function(){update()}, 5000);
+			stopCode = setInterval(function(){update()}, 5000);
 		}
 		
 		function firstUpdate(player) {
@@ -78,6 +80,7 @@
 		}
 		
 		function update() {
+			console.log(stopCode);
 			getTweets(player1);
 			getTweets(player2);
 			if (player1.numTweets > player2.numTweets){
@@ -87,6 +90,10 @@
 					player1.state = 2;
 				else
 					player1.state = 4;
+				if (player2.health == 0) {
+					clearInterval(stopCode);
+					player2.state = 6;
+				}
 			}
 			if (player2.numTweets > player1.numTweets){
 				player1.health -= 10;
@@ -95,8 +102,12 @@
 					player2.state = 2;
 				else
 					player2.state = 4;
+				if (player1.health == 0) {
+					clearInterval(stopCode);
+					player1.state = 6;
+				}
 			}
-			if (player1.numTweets = player2.numTweets) {
+			if (player1.numTweets == player2.numTweets) {
 				// NEW PICTURE
 			}
 			
