@@ -38,6 +38,7 @@
 		});
 		
 		var stopCode;
+		var stopCode2;
 		
 		//timer
 		function start(){
@@ -54,7 +55,7 @@
 			firstUpdate(player1);
 			firstUpdate(player2);
 			
-			stopCode = setInterval(function(){update()}, 2000);
+			stopCode = setInterval(function(){update()}, 1000);
 		}
 		
 		function firstUpdate(player) {
@@ -90,9 +91,18 @@
 				else
 					player1.state = 3;
 				if (player2.health == 0) {
-					clearInterval(stopCode);
 					player2.state = 6;
-					player1.state = 8;
+					clearInterval(stopCode);
+					setTimeout(function(){
+						clearInterval(stopCode2);
+						var c = document.getElementById("myCanvas");
+						var ctx=c.getContext("2d");
+						c.width = c.width;
+						player1.state = 8;
+						player1.sprites[player1.state].draw(ctx);
+						$('#firstBox').attr("disabled", false);
+						$('#secondBox').attr("disabled", false);
+					}, 2000);
 				}
 			}
 			if (player2.numTweets > player1.numTweets){
@@ -105,7 +115,16 @@
 				if (player1.health == 0) {
 					clearInterval(stopCode);
 					player1.state = 6;
-					player2.state = 8;
+					setTimeout(function(){
+					//	clearInterval(stopCode2);
+						player2.state = 8;
+						var c = document.getElementById("myCanvas");
+						var ctx=c.getContext("2d");
+						c.width = c.width;
+						player2.sprites[player1.state].draw(ctx);
+						$('#firstBox').attr("disabled", false);
+						$('#secondBox').attr("disabled", false);
+					}, 2000);
 				}
 			}
 			if (player1.numTweets == player2.numTweets) {
@@ -226,7 +245,7 @@
 			for(var i = 0; i < player2.sprites.length; i++){
 				player2.sprites[i].position ={x : c.width-player2.sprites[i].img.width, y: 10};
 			}
-			setInterval(function(){
+			stopCode2 = setInterval(function(){
 				c.width = c.width;
 				player1.sprites[player1.state].draw(ctx);
 				player2.sprites[player2.state].draw(ctx);
