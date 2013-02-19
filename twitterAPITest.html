@@ -15,6 +15,7 @@
 			this.numTweets = 0;
 			this.sprites = new Array();
 			this.state = 0;
+			this.count = 0;
 		}
 		
 		Player.prototype.toString = function() {
@@ -42,6 +43,7 @@
 		
 		//timer
 		function start(){
+			$("Start").val('Getting fighters ready');
 			$('#firstBox').attr("disabled", "disabled");
 			$('#secondBox').attr("disabled", "disabled");
 			player1 = new Player(document.getElementById("firstBox").value);
@@ -52,10 +54,29 @@
 				player2.hash = player2.hash.substring(1);
 				
 			loadShit();
+			getTrends();
 			firstUpdate(player1);
 			firstUpdate(player2);
 			
 			stopCode = setInterval(function(){update()}, 1000);
+		}
+		
+		function getTrends(){
+		var req = $.ajax({
+				type: 'GET',
+				dataType: 'jsonp',
+				url: 'https://api.twitter.com/1/trends/daily.json',
+				success: function(data) {
+					console.log(data);
+					$('#error').empty();
+				},
+				error: function(xhr, status, errorThrown) {
+					console.log(errorThrown);
+					$('#error').empty();
+					$('#error').append("Error :(. Try again?");
+					$('#textbox').attr("disabled", false);
+				}
+		});
 		}
 		
 		function firstUpdate(player) {
@@ -78,7 +99,6 @@
 				}
 			});
 		}
-		
 		function update() {
 			console.log(stopCode);
 			getTweets(player1);
@@ -116,7 +136,6 @@
 					clearInterval(stopCode);
 					player1.state = 6;
 					setTimeout(function(){
-					//	clearInterval(stopCode2);
 						player2.state = 8;
 						var c = document.getElementById("myCanvas");
 						var ctx=c.getContext("2d");
@@ -204,6 +223,7 @@
 //canvas
 		function Sprite(source){
 			this.img = new Image();
+			//this.img.onload = function(this){this.canLoad = true;}
 			this.img.src = source;
 			this.position = {x: 0, y:0};
 			this.origin = {x:0, y:0};
@@ -226,15 +246,11 @@
 		};
 		
 		function loadShit() {
-			var seattleSet = new Array();
 			for(var i = 1; i <= 9; i++){
-				var temp = new Image().src = "photos/Seattle"+i+".png";
-				player1.sprites.push(new Sprite(temp));
+				player1.sprites.push(new Sprite("photos/Seattle"+i+".png"));
 			} 
-			var SFset = new Array();
 			for(var i = 1; i <= 9; i++){
-				var temp = new Image().src = "photos/SanFran"+i+".png";
-				player2.sprites.push(new Sprite(temp));
+				player2.sprites.push(new Sprite("photos/SanFran"+i+".png"));
 			}
 		
 			var c = document.getElementById("myCanvas");
@@ -247,13 +263,15 @@
 			}
 			stopCode2 = setInterval(function(){
 				c.width = c.width;
-				player1.sprites[player1.state].draw(ctx);
-				player2.sprites[player2.state].draw(ctx);
-			},1000/60); 
+				
+					player1.sprites[player1.state].draw(ctx);
+					player2.sprites[player2.state].draw(ctx);
+				
+			},1000/60);
 		}
 </script>
 <div style ="float: left">
-	<img src = "photos/title.jpg"></img>
+	<img src = "photos/title.png"></img>
 	<p>
 	TweetFighter. it does stuff.
 	
@@ -268,7 +286,7 @@
 	</p>
 </div>
 <div>
-	<h2>Enter a hashtag!</h2>
+	<h2 id = "Start">Enter a hashtag!</h2>
 	<div style = "boarder: 5px;">
 		<input type="text" id="firstBox" value="#CodeDaySEA">
 		<input type="button" id="button" value="Fight!">
