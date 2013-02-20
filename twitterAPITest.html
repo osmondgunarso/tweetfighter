@@ -43,7 +43,6 @@
 		
 		//timer
 		function start(){
-			$("Start").val('Getting fighters ready');
 			$('#firstBox').attr("disabled", "disabled");
 			$('#secondBox').attr("disabled", "disabled");
 			player1 = new Player(document.getElementById("firstBox").value);
@@ -54,10 +53,10 @@
 				player2.hash = player2.hash.substring(1);
 				
 			loadShit();
-			getTrends();
+			//getTrends();
 			firstUpdate(player1);
 			firstUpdate(player2);
-			
+			clearInterval(stopCode);
 			stopCode = setInterval(function(){update()}, 1000);
 		}
 		
