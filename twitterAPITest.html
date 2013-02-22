@@ -86,7 +86,7 @@
 		function placeTrends(data){
 			today = new Date().toISOString().split("T")[0];
 			var trendsHTML = "";
-			for(var i = 0; i < 4; i++){
+			for(var i = 0; i < 8; i = i+2){
 				trendsHTML = trendsHTML + data.trends[today][i].name + " vs " + data.trends[today][i+1].name + "</br>";
 			}
 			$('#trends').html(trendsHTML);
