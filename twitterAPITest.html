@@ -3,10 +3,15 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Test</title>
+	<title>Tweet Fighter (A work in progress)</title>
 	
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 	<script type="text/javascript">
+		//bad globals
+		var seaSet;
+		var SFSet;
+		var today;
+		
 		//twitter
 		function Player(hash) {
 			this.hash = hash;
@@ -23,6 +28,7 @@
 		}
 		
 		$(document).ready(function(){
+			preLoad();
 			$('#button').click(function(){
 				start();
 			});
@@ -51,9 +57,7 @@
 				player1.hash = player1.hash.substring(1);
 			if (player2.hash.charAt(0) == '#')
 				player2.hash = player2.hash.substring(1);
-				
 			loadShit();
-			//getTrends();
 			firstUpdate(player1);
 			firstUpdate(player2);
 			clearInterval(stopCode);
@@ -64,9 +68,10 @@
 		var req = $.ajax({
 				type: 'GET',
 				dataType: 'jsonp',
-				url: 'https://api.twitter.com/1/trends/daily.json',
+				url: 'https://api.twitter.com/1/trends/weekly.json',
 				success: function(data) {
-					console.log(data);
+					//console.log(data);
+					placeTrends(data);
 					$('#error').empty();
 				},
 				error: function(xhr, status, errorThrown) {
@@ -76,6 +81,16 @@
 					$('#textbox').attr("disabled", false);
 				}
 		});
+		}
+		
+		function placeTrends(data){
+			today = new Date().toISOString().split("T")[0];
+			var trendsHTML = "";
+			for(var i = 0; i < 4; i++){
+				trendsHTML = trendsHTML + data.trends[today][i].name + " vs " + data.trends[today][i+1].name + "</br>";
+			}
+			$('#trends').html(trendsHTML);
+			console.log(trendsHTML);
 		}
 		
 		function firstUpdate(player) {
@@ -222,7 +237,6 @@
 //canvas
 		function Sprite(source){
 			this.img = new Image();
-			//this.img.onload = function(this){this.canLoad = true;}
 			this.img.src = source;
 			this.position = {x: 0, y:0};
 			this.origin = {x:0, y:0};
@@ -244,14 +258,21 @@
 			context.restore();
 		};
 		
-		function loadShit() {
+		function preLoad(){
+			getTrends();
+			seaSet = new Array();
+			SFSet = new Array();
 			for(var i = 1; i <= 9; i++){
-				player1.sprites.push(new Sprite("photos/Seattle"+i+".png"));
+				seaSet.push(new Sprite("photos/Seattle"+i+".png"));
 			} 
 			for(var i = 1; i <= 9; i++){
-				player2.sprites.push(new Sprite("photos/SanFran"+i+".png"));
+				SFSet.push(new Sprite("photos/SanFran"+i+".png"));
 			}
+		}
 		
+		function loadShit() {
+			player1.sprites = seaSet;
+			player2.sprites = SFSet;
 			var c = document.getElementById("myCanvas");
 			var ctx=c.getContext("2d");
 			for(var i = 0; i < player1.sprites.length; i++){
@@ -262,10 +283,8 @@
 			}
 			stopCode2 = setInterval(function(){
 				c.width = c.width;
-				
-					player1.sprites[player1.state].draw(ctx);
-					player2.sprites[player2.state].draw(ctx);
-				
+				player1.sprites[player1.state].draw(ctx);
+				player2.sprites[player2.state].draw(ctx);
 			},1000/60);
 		}
 </script>
@@ -277,11 +296,8 @@
 	</p>
 	<p>
 	<h3>Trending Fights</h3>
-	#BarackObama Vs. #MittRomney</br>
-	#Coke Vs. #Pepsi </br>
-	#UW Vs. #WSU </br>
-	#Facebook Vs. #Twitter </br>
-	#LALakers Vs. #LAClippers 
+	<div id = 'trends'>
+	</div>
 	</p>
 </div>
 <div>
