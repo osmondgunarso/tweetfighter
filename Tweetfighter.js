@@ -24,3 +24,12 @@ io.sockets.on('connection', function (socket) {
 });
 
 //twitter api calls
+
+function getTrends(){
+	var trend;
+	http.get(trend, function(res) {
+		console.log("Got response: " + res.statusCode);
+	}).on('error', function(e) {
+		console.log("Got error: " + e.message);
+	});
+}
