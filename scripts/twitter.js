@@ -165,7 +165,6 @@
 		function getTweets(player) {
 			$('#tweets').empty();
 			$('#error').empty();
-			$('#error').append("Sending request...");
 			
 			var req = $.ajax({
 				type: 'GET',
