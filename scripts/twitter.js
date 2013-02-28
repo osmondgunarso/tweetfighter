@@ -110,6 +110,8 @@
 		}
 		function update() {
 			console.log(stopCode);
+			getFace(player1);
+			getFace(player2);
 			getTweets(player1);
 			getTweets(player2);
 			if (player1.numTweets > player2.numTweets){
@@ -163,6 +165,25 @@
 			updateTable();
 			console.log(player1);
 			console.log(player2);
+		}
+		
+		//get facebook post
+		function getFace(player){
+			var req = $.ajax({
+					type: 'GET',
+					dataType: 'jsonp',
+					url: 'https://graph.facebook.com/search?q='+player.hash+'&type=post',
+					success: function(data) {
+						console.log(data);
+						$('#error').empty();
+					},
+					error: function(xhr, status, errorThrown) {
+						console.log(errorThrown);
+						$('#error').empty();
+						$('#error').append("Error :(. Try again?");
+						$('#textbox').attr("disabled", false);
+					}
+			});
 		}
 		
 		//get tweets
