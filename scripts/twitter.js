@@ -2,7 +2,6 @@
 		var seaSet;
 		var SFSet;
 		var today;
-		
 		//twitter
 		function Player(hash) {
 			this.hash = hash;
@@ -14,7 +13,11 @@
 			this.count = 0;
 		}
 		
-		Player.prototype.toString = function() {
+		Player.prototype.createFirst = function() {
+			return this.hash + "</br><div id='stats"+this.hash+"'>" + "Health: " + this.health + ", Tweets: " + this.numTweets + "</div><div class='progress progress-striped active'> <div class='bar' id = '"+ this.hash +"' style='width: " + this.health +"%'></div> </div>";
+		}
+		
+		Player.prototype.toString = function(){
 			return "Health: " + this.health + ", Tweets: " + this.numTweets;
 		}
 		
@@ -51,6 +54,7 @@
 			loadShit();
 			firstUpdate(player1);
 			firstUpdate(player2);
+			debugInfo();
 			clearInterval(stopCode);
 			stopCode = setInterval(function(){update()}, 1000);
 		}
@@ -156,14 +160,14 @@
 				player2.state = 1;
 			}
 			
-			debugInfo();
+			updateTable();
 			console.log(player1);
 			console.log(player2);
 		}
 		
 		//get tweets
 		function getTweets(player) {
-			$('#tweets').empty();
+			//$('#tweets').empty();
 			$('#error').empty();
 			
 			var req = $.ajax({
@@ -188,15 +192,22 @@
 			});
 		}
 		
+		function updateTable(){
+			$('#stats'+player1.hash).html(player1.toString());
+			$('#stats'+player2.hash).html(player2.toString());
+			$('#'+player1.hash).css('width', player1.health+'%');
+			$('#'+player2.hash).css('width', player2.health+'%');
+		}
+		
 		function debugInfo() {
 			$('#tweets').empty();
 			var row = document.createElement("tr");
 			var d1 = document.createElement("td");
 			var d2 = document.createElement("td");
 			
-			$(d1).append(player1.toString());
-			$(d2).append(player2.toString());
+			$(d1).html(player1.createFirst());
+			$(d2).html(player2.createFirst());
 			$(row).append(d1);
 			$(row).append(d2);
-			$('#tweets').append(row);
+			$('#tweets').html(row);
 		}

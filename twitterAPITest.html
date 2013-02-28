@@ -8,9 +8,7 @@
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 	<script type="text/javascript" src="scripts/twitter.js"></script>
 	<script type="text/javascript" src="scripts/canvas.js"></script>
-	<script src="/socket.io/socket.io.js"></script>
-	<script type="text/javascritp" src="scritps/socket.js"></script>
-	
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 	<style type="text/css">
 		body {
 			font-family: monospace;
@@ -36,7 +34,9 @@
 	<img src = "photos/title.png"></img>
 	<p>
 	TweetFighter. it does stuff.
-	
+	<!-- tweet button still doesn't have correct parameters -->
+	<a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 	</p>
 	<p>
 	<h3>Trending Fights</h3>
@@ -48,13 +48,13 @@
 	<h2 id = "Start">Enter a hashtag!</h2>
 	<div style = "boarder: 5px;">
 		<input type="text" id="firstBox" value="#CodeDaySEA">
-		<input type="button" id="button" value="Fight!">
+		<input type="button" id="button" value="Fight!" class = "btn btn-primary">
 		<input type = "text" id = "secondBox" value = "#CodeDaySF">
 	</div>
 	<br>
 	<div id="error"></div>
 	<table id="tweets" align=center></table>
-	<canvas id="myCanvas" width="900" height="495" style="border:1px solid #c3c3c3;">
+	<canvas id="myCanvas" width="900" height="495">
 	Your browser does not support the HTML5 canvas tag.
 	</canvas>
 		</div>
