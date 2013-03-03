@@ -3,7 +3,7 @@ var express = require('express');
 var http = require('http').createServer(app);
 var fs = require('fs');
 var app = express();
-var ip = require('socket.io').listen(http);
+var io = require('socket.io').listen(http);
 
 //create server
 app.use(express.static(__dirname + '/'));
@@ -26,7 +26,7 @@ io.sockets.on('connection', function (socket) {
 //twitter api calls
 
 function getTrends(){
-	var trend;
+	var trend = 'https://api.twitter.com/1/trends/weekly.json';
 	http.get(trend, function(res) {
 		console.log("Got response: " + res.statusCode);
 	}).on('error', function(e) {

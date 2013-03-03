@@ -1,14 +1,15 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Tweet Fighter (A work in progress)</title>
-	<!--The internet and google, really mostly google, want to use type = application/javascript but you text/javascript has more support-->
+	<!--The internet and google, really mostly google, want to use type = application/javascript but text/javascript has more support-->
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 	<script type="text/javascript" src="scripts/twitter.js"></script>
 	<script type="text/javascript" src="scripts/canvas.js"></script>
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+	<script type="text/javascript" scr ="bootstrap/js/bootstrap.min.js"></script>
 	<style type="text/css">
 		body {
 			font-family: monospace;
@@ -30,8 +31,10 @@
 </head>
 
 <body>
-<div style ="float: left">
-	<img src = "photos/title.png"></img>
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span2">
+	<img src = "photos/title.png" alt="Tweet Fighter!">
 	<p>
 	TweetFighter. it does stuff.
 	<!-- tweet button still doesn't have correct parameters -->
@@ -44,12 +47,12 @@
 	</div>
 	</p>
 </div>
-<div>
+<div class="span10">
 	<h2 id = "Start">Enter a hashtag!</h2>
 	<div style = "boarder: 5px;">
-		<input type="text" id="firstBox" value="#CodeDaySEA">
+		<input type="text" id="firstBox" value="#CodeDaySEA" class = "hashes">
 		<input type="button" id="button" value="Fight!" class = "btn btn-primary">
-		<input type = "text" id = "secondBox" value = "#CodeDaySF">
+		<input type = "text" id = "secondBox" value = "#CodeDaySF" class = "hashes">
 	</div>
 	<br>
 	<div id="error"></div>
@@ -57,7 +60,8 @@
 	<canvas id="myCanvas" width="900" height="495">
 	Your browser does not support the HTML5 canvas tag.
 	</canvas>
-		</div>
+	</div>
+	</div>
 </body>
 
 </html>
