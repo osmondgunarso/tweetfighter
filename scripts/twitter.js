@@ -1,7 +1,5 @@
-		//bad globals
-		var seaSet;
-		var SFSet;
-		var today;
+//idealy nothing in this file will ever use DOM
+		
 		//twitter
 		function Player(hash) {
 			this.hash = hash;
@@ -9,12 +7,14 @@
 			this.pastInformation = {tweet:0, face:0};
 			this.numTweets = 0;
 			this.numFace = 0;
-			this.numTot = this.Tweets + this.numFace;
-			this.sprites = new Array();
+			this.sprites = [];
 			this.state = 0;
 			this.count = 0;
 		}
 		
+		Player.prototype.numTot = function(){
+			return this.numTweets + this.numFace;
+		}
 		Player.prototype.createFirst = function() {
 			return this.hash + "</br><div id='stats"+this.hash+"'>" + "Health: " + this.health + ", Tweets: " + this.numTweets + "</div><div class='progress progress-striped active'> <div class='bar' id = '"+ this.hash +"' style='width: " + this.health +"%'></div> </div>";
 		}
@@ -22,38 +22,9 @@
 		Player.prototype.toString = function(){
 			return "Health: " + this.health + ", Tweets: " + this.numTweets;
 		}
-		
-		$(document).ready(function(){
-			preLoad();
-			$('#button').click(function(){
-				start();
-			});
-			
-			$('.hashes').keypress(function(event){
-				if (event.which == 13)
-					start();
-			});
-		});
-		
+
 		var stopCode;
-		var stopCode2;
 		
-		//timer
-		function start(){
-			$('.hashes').attr("disabled", "disabled");
-			player1 = new Player($('#firstBox').val());
-			player2 = new Player($('#secondBox').val());
-			if (player1.hash.charAt(0) == '#')
-				player1.hash = player1.hash.substring(1);
-			if (player2.hash.charAt(0) == '#')
-				player2.hash = player2.hash.substring(1);
-			loadShit();
-			firstUpdate(player1);
-			firstUpdate(player2);
-			debugInfo();
-			clearInterval(stopCode);
-			stopCode = setInterval(function(){update()}, 1000);
-		}
 		
 		function firstUpdate(player) {
 			var req = $.ajax({
@@ -140,17 +111,4 @@
 					$('#textbox').attr("disabled", false);
 				}
 		});
-		}
-		
-		function debugInfo() {
-			$('#tweets').empty();
-			var row = document.createElement("tr");
-			var d1 = document.createElement("td");
-			var d2 = document.createElement("td");
-			
-			$(d1).html(player1.createFirst());
-			$(d2).html(player2.createFirst());
-			$(row).append(d1);
-			$(row).append(d2);
-			$('#tweets').html(row);
 		}

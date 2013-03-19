@@ -1,0 +1,18 @@
+body {
+	font-family: monospace;
+	text-align: center;
+}
+table {
+	border: 2px solid black;
+	border-collapse: collapse;
+}
+td {
+	border: 1px solid black;
+	padding: 4px;
+	width:100px;
+	table-layout:fixed;
+}
+#error {
+	font-style: italic;
+	color: red;
+}
