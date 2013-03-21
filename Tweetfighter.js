@@ -4,16 +4,16 @@ var http = require('http').createServer(app);
 var fs = require('fs');
 var app = express();
 var io = require('socket.io').listen(http);
-
+var port = 8888;
 //create server
-app.use(express.static(__dirname + '/'));
+app.use(express.static(__dirname + '/', { maxAge: 31557600000 }));
 app.get('/', function(req, res){
     fs.readFile(__dirname + '/twitterAPITest.html', 'utf8', function(err, text){
-        res.send(text);
+		res.send(text);
     });
 });
-app.listen(8888);
-console.log(8888);
+app.listen(port);
+console.log(port);
 
 //socket stuff
 io.sockets.on('connection', function (socket) {
@@ -32,4 +32,8 @@ function getTrends(){
 	}).on('error', function(e) {
 		console.log("Got error: " + e.message);
 	});
+}
+
+function getTweets(){
+	
 }

@@ -9,7 +9,7 @@ table {
 td {
 	border: 1px solid black;
 	padding: 4px;
-	width:100px;
+	width: 200px;
 	table-layout:fixed;
 }
 #error {

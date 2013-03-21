@@ -1,5 +1,4 @@
 //idealy nothing in this file will ever use DOM
-		
 		//twitter
 		function Player(hash) {
 			this.hash = hash;
@@ -15,6 +14,7 @@
 		Player.prototype.numTot = function(){
 			return this.numTweets + this.numFace;
 		}
+		
 		Player.prototype.createFirst = function() {
 			return this.hash + "</br><div id='stats"+this.hash+"'>" + "Health: " + this.health + ", Tweets: " + this.numTweets + "</div><div class='progress progress-striped active'> <div class='bar' id = '"+ this.hash +"' style='width: " + this.health +"%'></div> </div>";
 		}
@@ -22,9 +22,6 @@
 		Player.prototype.toString = function(){
 			return "Health: " + this.health + ", Tweets: " + this.numTweets;
 		}
-
-		var stopCode;
-		
 		
 		function firstUpdate(player) {
 			var req = $.ajax({
@@ -56,6 +53,7 @@
 					url: 'https://graph.facebook.com/search?since='+player.pastInformation.face+'&q='+player.hash+'&type=post',
 					success: function(data) {
 						player.numface = data.length;
+						console.log(data);
 						$('#error').empty();
 					},
 					error: function(xhr, status, errorThrown) {
@@ -112,3 +110,53 @@
 				}
 		});
 		}
+		
+		function makeCalls(player){
+			getFace(player);
+			getTweets(player);
+		}
+		
+function findState() {
+	if (player1.numTot() > player2.numTot()){
+			player2.health -= 10;
+			player2.state = 4;
+			if (player1.state == 3)
+				player1.state = 5;
+			else
+				player1.state = 3;
+			if (player2.health == 0) {
+				player2.state = 6;
+				clearInterval(stopCode);
+				setTimeout(function(){
+					var c = document.getElementById("myCanvas");
+					var ctx=c.getContext("2d");
+					c.width = c.width;
+					player1.state = 8;
+					player1.sprites[player1.state].draw(ctx);
+					$('.hashes').attr("disabled", false);
+				}, 1000);
+			}
+		}
+	if (player2.numTot() > player1.numTot()){
+		player1.health -= 10;
+		player1.state = 4;
+		if (player2.state == 3)
+			player2.state = 5;
+		else
+			player2.state = 3;
+		if (player1.health == 0) {
+			clearInterval(stopCode);
+			player1.state = 6;
+			setTimeout(function(){
+				player2.state = 8;
+				c.width = c.width;
+				player2.sprites[player2.state].draw(ctx);
+				$('.hashes').attr("disabled", false);
+			}, 1000);
+		}
+	}
+	if (player1.numTot() == player2.numTot()) {
+		player1.state = 1;
+		player2.state = 1;
+	}
+}
