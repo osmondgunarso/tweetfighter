@@ -1,3 +1,8 @@
+/*todo wish list
+	1. migrate to google closure
+	2. display tweets somewhere
+*/
+
 //global
 var c;
 var ctx;
