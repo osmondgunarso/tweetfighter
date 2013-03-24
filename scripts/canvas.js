@@ -1,6 +1,10 @@
 /*todo wish list
 	1. migrate to google closure
 	2. display tweets somewhere
+	http://closure-library.googlecode.com/svn/trunk/closure/goog/demos/
+		we need progress bars
+		bubbles
+		buttons
 */
 
 //global
