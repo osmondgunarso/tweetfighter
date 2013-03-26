@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Tweet Fighter (A work in progress)</title>
+	<!--The internet and google, really mostly google, want to use type = application/javascript but text/javascript has more support-->
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href = "style/Main.css">
+	<script src="closure-library/closure/goog/base.js"></script>
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="scripts/player.js"></script>
+	<script type="text/javascript" src="scripts/sprite.js"></script>
+	<script type="text/javascript" src="scripts/twitter.js"></script>
+	<script type="text/javascript" src="scripts/control.js"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span2">
+	<img src = "photos/title.png" alt="Tweet Fighter!">
+	<p>
+	TweetFighter. it does stuff.
+	</p>
+	<p>
+	<h3>Trending Fights</h3>
+	<div id = 'trends'>
+	</div>
+	</p>
+</div>
+<div class="span10">
+	<h2 id = "Start">Enter a hashtag!</h2>
+	<div>
+		<input type="text" id="firstBox" value="#CodeDaySEA" class = "hashes">
+		<input type="button" id="button" value="Fight!" class = "btn btn-primary">
+		<input type = "text" id = "secondBox" value = "#CodeDaySF" class = "hashes">
+	</div>
+	<br>
+	<div id="error"></div>
+	<table id="tweets" align=center></table>
+	<canvas id="myCanvas" width="900" height="495">
+	Your browser does not support the HTML5 canvas tag.
+	</canvas>
+	</div>
+	</div>
+</body>
+
+</html>
