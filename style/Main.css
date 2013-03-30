@@ -6,7 +6,25 @@ table {
 	border: 2px solid black;
 	border-collapse: collapse;
 }
+
+td{
+	padding: 5px;
+}
 #error {
 	font-style: italic;
 	color: red;
+}
+#tweet1 {
+    width: 200px;
+    word-wrap: break-word;
+	margin-right: 2em;
+}
+#tweet2 {
+    width: 200px;
+    word-wrap: break-word;
+	margin-left: 2em;
+}
+
+.fights{
+	word-wrap: break-word;
 }

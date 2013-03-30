@@ -147,6 +147,8 @@ function update() {
 
 function updateTable() {
 	'use strict';
+	$('#tweet1').html(player1.display);
+	$('#tweet2').html(player2.display);
 	$('#stats'+player1.hash).html(player1.toString());
 	$('#stats'+player2.hash).html(player2.toString());
 	$('#'+player1.hash).css('width', player1.health+'%');
@@ -179,12 +181,19 @@ function debugInfo() {
 	'use strict';
 	$('#tweets').empty();
 	var row = document.createElement("tr");
-	var d1 = document.createElement("td");
+	var d1 = document.createElement("div");
 	var d2 = document.createElement("td");
-	
-	$(d1).html(player1.createFirst());
-	$(d2).html(player2.createFirst());
+	var d3 = document.createElement("td");
+	var d4 = document.createElement("div");
+	d1.setAttribute("id", "tweet1");
+	d4.setAttribute("id", "tweet2");
+	d1.setAttribute("class", "alert alert-block");
+	d4.setAttribute("class", "alert alert-block");
+	$(d2).html(player1.createFirst());
+	$(d3).html(player2.createFirst());
 	$(row).append(d1);
 	$(row).append(d2);
+	$(row).append(d3);
+	$(row).append(d4);
 	$('#tweets').html(row);
 }

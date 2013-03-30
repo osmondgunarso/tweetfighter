@@ -16,6 +16,7 @@ com.tweetfighter.player = function(hash){
 	this.sprites = [];
 	this.state = 0;
 	this.count = 0;
+	this.display = "";
 }
 
 /**
@@ -31,6 +32,7 @@ com.tweetfighter.player.prototype.numTot = function(){
 * @return {String}
 */
 com.tweetfighter.player.prototype.createFirst = function() {
+	
 	return this.hash + "</br><div id='stats"+this.hash+"'>" + "Health: " + this.health + ", Tweets: " + this.numTweets + "</div><div class='progress progress-striped active'> <div class='bar' id = '"+ this.hash +"' style='width: " + this.health +"%'></div> </div>";
 }
 

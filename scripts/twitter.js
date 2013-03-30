@@ -24,7 +24,7 @@
 		}
 		
 		//get facebook post from last time updates
-		function getFace(player){
+		/*function getFace(player){
 			var req = $.ajax({
 					type: 'GET',
 					dataType: 'jsonp',
@@ -42,6 +42,7 @@
 					}
 			});
 		}
+		*/
 		
 		//get tweets
 		function getTweets(player) {
@@ -54,6 +55,9 @@
 				success: function(data) {
 					player.numTweets = 0;
 					player.pastInformation.tweet = data.max_id;
+					if(data.results.length != 0){
+						player.display = data.results[0].text;
+					}
 					console.log(data);
 					$('#error').empty();
 					if (data.max_id != data.since_id)
@@ -90,7 +94,7 @@
 		}
 		
 		function makeCalls(player){
-			getFace(player);
+			//getFace(player);
 			getTweets(player);
 		}
 		
