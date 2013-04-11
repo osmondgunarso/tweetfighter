@@ -22,9 +22,15 @@ io.sockets.on('connection', function (socket) {
 	//socket stuff goes in here
 	socket.emit('news', { hello: 'world' });
 	
+	//everything should be sent as a JSON object
+
 	socket.on('my other event', function (data) {
 		console.log(data);
 	});
+
+	socket.on('giveMeTweets', function(){
+		socket.emit('updateInfo', players);
+});
 });
 
 //twitter api calls
@@ -46,12 +52,28 @@ function getTrends(){
 	});
 }
 
-function getTweets(){
+function getTweets(player){
+	var query = 'http://search.twitter.com/search.json?q=%23'+player.has+
+	"&result_type=recent&rpp=100&include_entities=true&since_id="+
+	player.pastInformation.tweet';
+
+	http.get(query, function(res) {
+		var data = '';
+		console.log("Got response: " + res.statusCode);
+		res.on("data", function(chunk) {
+			data += chunk
+		});
+		res.on('end', function(){
+			var obj = JSON.parse(data);
+			console.log(obj);
+		});
+	}).on('error', function(e) {
+		console.log("Got error: " + e.message);
+	});
 	
 }
 
-function calculateTweets(){
-
+function findState() {
 }
 
 getTrends();
