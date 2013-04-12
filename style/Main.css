@@ -28,3 +28,8 @@ td{
 .fights{
 	word-wrap: break-word;
 }
+
+#myCanvas {
+	width: auto;
+	height: auto;
+}	
