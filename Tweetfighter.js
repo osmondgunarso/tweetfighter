@@ -1,3 +1,5 @@
+
+
 //requirements
 var express = require('express');
 var app = express();
@@ -7,7 +9,7 @@ var fs = require('fs');
 var io = require('socket.io').listen(server);
 
 
-http.createServer(app).listen(888);
+http.createServer(app).listen(80);
 
 //create server
 app.use(express.compress());
@@ -18,11 +20,12 @@ app.get('/', function(req, res){
     });
 });
 
+
+
 io.sockets.on('connection', function (socket) {
 
 	//socket stuff goes in here
 	socket.emit('news', { hello: 'world' });
-
 	socket.on('my other event', function (data) {
 		console.log(data);
 	});
