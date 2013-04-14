@@ -1,10 +1,10 @@
 {
   "name": "Tweetfighter",
-  "subdomain": "ozmude-Tweetfighter",
+  "subdomain": "tweetfighter-Tweetfighter",
   "scripts": {
     "start": "Tweetfighter.js"
   },
-  "version": "0.0.0-3",
+  "version": "0.0.0-1",
   "engines": {
     "node": "0.8.x"
   },
