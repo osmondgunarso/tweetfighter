@@ -2,38 +2,47 @@
 
 //requirements
 var express = require('express');
-var app = express();
 var http = require('http');
-var server = http.createServer(app);
 var fs = require('fs');
+var app = express();
+var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
+server.listen(80);
 
-http.createServer(app).listen(80);
+function basic_get(url, path) {
+  app.get(url, function(req, res) {
+    fs.readFile(__dirname + path, 'utf8',
+      function(err, text) {
+        res.send(text);
+      }
+    );
+  });
+}
+
+sockets = []
+counter = 0;
 
 //create server
 app.use(express.compress());
 app.use(express.static(__dirname + '/', { maxAge: 31557600000 }));
-app.get('/', function(req, res){
-    fs.readFile(__dirname + '/tweetfighterbefore.html', 'utf8', function(err, text){
-		res.send(text);
-    });
-});
-
-
+basic_get('/', '/tweetfighterbefore.html');
+basic_get('/socket', '/pages/socket_test.html')
 
 io.sockets.on('connection', function (socket) {
-
 	//socket stuff goes in here
-	socket.emit('news', { hello: 'world' });
-	socket.on('my other event', function (data) {
-		console.log(data);
-	});
-
-	socket.on('giveMeTweets', function(){
-		socket.emit('updateInfo', players);
-  });
+	socket.emit('initial', 'hello!');
+  sockets.push(socket)
 });
+
+function disperse() {
+  s = sockets.slice();
+  for (i in s) {
+    s[i].emit('update', {counter: counter});
+  };
+  counter++;
+}
+timerID1 = setInterval(disperse, 5000);
 
 //twitter api calls
 
@@ -76,4 +85,4 @@ function getTweets(player){
 function findState() {
 }
 
-getTrends();
+//getTrends();
