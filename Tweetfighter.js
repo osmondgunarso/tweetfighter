@@ -20,31 +20,34 @@ function basic_get(url, path) {
   });
 }
 
-sockets = []
 counter = 0;
 
 //create server
 app.use(express.compress());
 app.use(express.static(__dirname + '/', { maxAge: 31557600000 }));
+
+// /
 basic_get('/', '/tweetfighterbefore.html');
+
+
+// /socket
 basic_get('/socket', '/pages/socket_test.html')
 
-io.sockets.on('connection', function (socket) {
-	//socket stuff goes in here
+var counter = 0;
+
+var test = io.of('/socket');
+test.on('connection', function (socket) {
 	socket.emit('initial', 'hello!');
-  sockets.push(socket)
 });
 
 function disperse() {
-  s = sockets.slice();
-  for (i in s) {
-    s[i].emit('update', {counter: counter});
-  };
+  test.emit('update', {counter: counter});
   counter++;
 }
 timerID1 = setInterval(disperse, 5000);
 
-//twitter api calls
+
+// twitter api calls
 
 function getTrends(){
 	var trend = 'http://api.twitter.com/1/trends/weekly.json';

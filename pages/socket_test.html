@@ -3,7 +3,7 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    var socket = io.connect('/');
+    var socket = io.connect('/socket');
     socket.on('update', function (data) {
       $("#counter").text(data.counter);
       console.log(data.counter);
