@@ -15,16 +15,29 @@ td{
 	color: red;
 }
 #tweet1 {
-    width: 200px;
     word-wrap: break-word;
 	margin-right: 2em;
 }
 #tweet2 {
-    width: 200px;
     word-wrap: break-word;
 	margin-left: 2em;
 }
 
+#tweet {
+	padding-top: 2em;
+	overflow: hidden;
+}
+
+.display {
+	word-wrap: normal;
+	padding-right: 2%;
+	width: 20%;
+	float: left;
+}
+
+.container-fluid .span10 #inputs .hashes {
+	margin: 0pt;
+}
 .fights{
 	word-wrap: break-word;
 }

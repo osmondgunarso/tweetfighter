@@ -59,9 +59,9 @@ var Sprite = com.tweetfighter.sprite;
 var Player = com.tweetfighter.player;
 
 //events
-//adds click listner for the fight buttons on the side of the page
 /**
 * places hashtags in button onto the fight stage
+* starts fight
 * @param {element}
 */
 function placeFight(btn) {
@@ -70,6 +70,9 @@ function placeFight(btn) {
 		start();
 }
 
+/**
+* listens to start fight
+*/
 $(document).ready(function () {
 	'use strict';
 	preLoad();
@@ -177,23 +180,24 @@ function loadShit() {
 	}
 }
 
+/**
+* generates information of fight
+* CAUTION: THE ORDER THE DIVS ARE MADE IS VERY IMPORANT AND VERY CONFUSING
+* [ 0 | 1 | 2 | 3 ]
+* [ tweets 2 | stats 1 | stats 2 | tweets 2 ]
+*/
 function debugInfo() {
 	'use strict';
 	$('#tweets').empty();
-	var row = document.createElement("tr");
-	var d1 = document.createElement("div");
-	var d2 = document.createElement("td");
-	var d3 = document.createElement("td");
-	var d4 = document.createElement("div");
-	d1.setAttribute("id", "tweet1");
-	d4.setAttribute("id", "tweet2");
-	d1.setAttribute("class", "alert alert-block");
-	d4.setAttribute("class", "alert alert-block");
-	$(d2).html(player1.createFirst());
-	$(d3).html(player2.createFirst());
-	$(row).append(d1);
-	$(row).append(d2);
-	$(row).append(d3);
-	$(row).append(d4);
-	$('#tweets').html(row);
+	var infoBoxes = [];
+	for (var i = 0; i < 4; i++){
+		infoBoxes.push(document.createElement("div"));
+	}
+	$(infoBoxes[0]).attr({id: "tweet1", class: "alert alert-block display"});
+	$(infoBoxes[1]).attr({class: "display"});
+	$(infoBoxes[2]).attr({class: "display"});
+	$(infoBoxes[3]).attr({id: "tweet2", class: "alert alert-block display"});
+	$(infoBoxes[1]).html(player1.createFirst());
+	$(infoBoxes[2]).html(player2.createFirst());
+	$('#tweets').append(infoBoxes);
 }

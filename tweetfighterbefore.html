@@ -17,34 +17,33 @@
 </head>
 
 <body>
-<div class="container-fluid">
-<div class="row-fluid">
-<div class="span2">
-	<img src = "photos/title.png" alt="Tweet Fighter!">
-	<p>
-	TweetFighter. it does stuff.
-	</p>
-	<p>
-	<h3>Trending Fights</h3>
-	<div id = 'trends'>
-	</div>
-	</p>
-</div>
-<div class="span10">
-	<h2 id = "Start">Enter a hashtag!</h2>
-	<div>
-		<input type="text" id="firstBox" value="#CodeDaySEA" class = "hashes">
-		<input type="button" id="button" value="Fight!" class = "btn btn-primary">
-		<input type = "text" id = "secondBox" value = "#CodeDaySF" class = "hashes">
-	</div>
-	<br>
-	<div id="error"></div>
-	<div id="tweets" align=center>
-	</div>
-	<canvas id="myCanvas" width="900" height="495">
-	Your browser does not support the HTML5 canvas tag.
-	</canvas>
-	</div>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span2">
+				<img src = "photos/title.png" alt="Tweet Fighter!">
+				<p>
+					TweetFighter. it does stuff.
+				</p>
+				<p>
+					<h3>Trending Fights</h3>
+					<div id = 'trends'></div>
+				</p>
+			</div>
+			<div class="span10">
+				<h2 id = "Start">Enter a hashtag!</h2>
+				<div id = "inputs" class = "span12">
+					<input type="text" id="firstBox" value="#CodeDaySEA" class = "hashes">
+					<input type="button" id="button" value="Fight!" class = "btn btn-primary">
+					<input type = "text" id = "secondBox" value = "#CodeDaySF" class = "hashes">
+				</div>
+				<div id="error"></div>
+				<div id="tweets" class="span12">
+				</div>
+				<canvas id="myCanvas" width="900" height="495">
+				Your browser does not support the HTML5 canvas tag.
+				</canvas>
+			</div>
+		</div>
 	</div>
 </body>
 
