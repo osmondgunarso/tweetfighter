@@ -180,7 +180,7 @@ function loadShit() {
 	}
 }
 
-/**
+/*
 * generates information of fight
 * CAUTION: THE ORDER THE DIVS ARE MADE IS VERY IMPORANT AND VERY CONFUSING
 * [ 0 | 1 | 2 | 3 ]
