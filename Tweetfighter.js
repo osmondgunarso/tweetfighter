@@ -2,7 +2,8 @@
 *	TODO:
 * 		Twitter login for cust http://passportjs.org/guide/twitter/
 *		database for saved games
-*		twitter api calls
+*		twitter api calls http://www.catonmat.net/blog/nodejs-modules-ntwitter/
+*		ntwitter
 */
 //requirements
 var express = require('express');
