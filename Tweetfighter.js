@@ -68,7 +68,8 @@ legit.on('connection', function (socket){
 	});
 	socket.on('start', function (data){
 		//start already made game
-		runningGames[data.name] = setinterval(gameHandle(data), data.time); 
+		var holder = runningGames[data.name+"game"];
+		runningGames[data.name] = setinterval(gameHandle(holder), data.time); 
 	});
 	socket.on('killOff', function (data) {
 		//end running game
@@ -77,8 +78,7 @@ legit.on('connection', function (socket){
 });
 
 function gameHandle(data){
-	var holder = runningGames[data.name+"game"];
-	connections.in(holder.getName()).emit('update', holder.getStat());
+	connections.in(data.getName()).emit('update', data.getStat());
 }
 
 //////////////////////////////////////////////////////////
