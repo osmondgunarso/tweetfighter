@@ -47,32 +47,12 @@ player.prototype = {
 		return {"Health" :this.health, "Tweets" : this.numTweets, "name": this.hash}
 	},
 	
-	getTweet : function(){
-			var query = 'http://search.twitter.com/search.json?q=%23'+this.hash+
-	"&result_type=recent&rpp=100&include_entities=true&since_id="+
-	this.pastInformation.tweet;
-
-	http.get(query, function(res) {
-		var data = '';
-		console.log("Got response: " + res.statusCode);
-		res.on("data", function(chunk) {
-			data += chunk
-		});
-		res.on('end', function(){
-			var obj = JSON.parse(data);
-			this.numTweets = 0;
-			player.pastInformation.tweet = obj.max_id;
-			if(obj.results.length != 0){
-				this.display = obj.results[0].text;
-			}
-			console.log(obj);
-			$('#error').empty();
-			if (obj.max_id != objt.since_id)
-				this.numTweets = obj.results.length;
-		});
-	}).on('error', function(e) {
-		console.log("Got error: " + e.message);
-	});
+	/**
+	* Returns hash tag of player
+	* @return {String}
+	*/
+	getHash : function(){
+		return this.hash;
 	}
 };
 

@@ -1,9 +1,10 @@
 /**
 *	TODO:
-* 		Twitter login for cust http://passportjs.org/guide/twitter/
-*		database for saved games
-*		twitter api calls http://www.catonmat.net/blog/nodejs-modules-ntwitter/
-*		ntwitter
+* 		Things till Demo ready
+*			1) twitter data parseing
+*		Things till launch ready
+*			1) user login
+*			2) create legit database that isn't just an object in ram
 */
 //requirements
 var express = require('express');
@@ -14,6 +15,7 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 var player = require('./modules/player.js');
 var game = require('./modules/game.js');
+var runningGames = new Object(); //this is a json object, which is kinda like a map
 
 server.listen(8080);
 
@@ -44,6 +46,44 @@ test.on('connection', function (socket) {
 	socket.emit('initial', 'hello!');
 });
 
+//////////////////////////////////////////////////////////
+//		START OF	NEW CODE	NOT TESTED 
+//////////////////////////////////////////////////////////
+
+//rooms!
+var connections = io.of('/');
+connections.on('connection', function (socket) {
+	socket.on('enter', function (data){
+		//add user to room
+		socket.join(data.room);
+	});
+});
+
+//should only be accessed by login user
+var legit = io.of('/user');
+legit.on('connection', function (socket){
+	socket.on('create', function (data) {
+		//create new game an add to database
+		runningGames[data.name+"game"] = new game(data.player1, data.player2, data.name)
+	});
+	socket.on('start', function (data){
+		//start already made game
+		runningGames[data.name] = setinterval(gameHandle(data), data.time); 
+	});
+	socket.on('killOff', function (data) {
+		//end running game
+		clearInterval(runningGames[data.name]);
+	});
+});
+
+function gameHandle(data){
+	var holder = runningGames[data.name+"game"];
+	connections.in(holder.getName()).emit('update', holder.getStat());
+}
+
+//////////////////////////////////////////////////////////
+//		END OF		NEW CODE	NOT TESTED 
+//////////////////////////////////////////////////////////
 
 function disperse() {
   test.emit('update', {counter: counter});

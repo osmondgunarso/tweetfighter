@@ -3,6 +3,7 @@
 		
 		function firstUpdate(player) {
 			var req = $.ajax({
+			jsonp: 'jsonp'  ,
 				type: 'GET',
 				dataType: 'jsonp',
 				url: 'http://search.twitter.com/search.json?q=%23'+player.hash+"&result_type=recent&rpp=1&include_entities=true&since_id="+player.pastInformation.tweet,
@@ -49,6 +50,7 @@
 			$('#error').empty();
 			
 			var req = $.ajax({
+				jsonp: 'jsonp',
 				type: 'GET',
 				dataType: 'jsonp',
 				url: 'http://search.twitter.com/search.json?q=%23'+player.hash+"&result_type=recent&rpp=100&include_entities=true&since_id="+player.pastInformation.tweet,
