@@ -26,6 +26,7 @@ var game = function (hash1, hash2, roomName) {
 	  access_token_key: 'keys',
 	  access_token_secret: 'go here'
 	});
+	this.timer = null;
 	
 }
 
@@ -34,8 +35,12 @@ game.prototype = {
 	*	progesses game along one round, stores information to stat
 	*	@private
 	*/
-		broadcast : function () {
+		update : function () {
 			//game object will handle calls to twitter
+			var request = ""
+			twit.search(request, {}, function (err, data){
+				sort(data); //sudo code holder 
+			});			
 			//pointers
 			this.stat = {"one": this.player1.toJSON(), "two": this.player2.toJSON()};
 		},
@@ -46,21 +51,15 @@ game.prototype = {
 	*/
 		startFight : function (time) {
 			//create connection
-			this.twit.stream('statuses/filter', {'track':this.player1.getHash() + " " + this.player2.getHash()}, function (stream){
-				stream.on('data', function(data){
-					//update player information
-					console.log(data);	//not sure how to parse data yet, might want to use search api instead of stream
-				});
-				twit.currentStream = stream;
-			});
+			timer = setInterval(update, time);
 		},
 	
 	/**
 	*	stops fight 
 	*/
 		stopFight : function () {
-			//should check if stream is already dead
-			this.twit.currentStream.destroy();
+			clearInterval(timer);
+			timer = null;
 		},
 	
 	/**

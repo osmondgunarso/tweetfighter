@@ -53,6 +53,10 @@ player.prototype = {
 	*/
 	getHash : function(){
 		return this.hash;
+	},
+	
+	update : function(){
+		
 	}
 };
 
